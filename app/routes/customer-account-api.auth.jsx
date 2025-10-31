@@ -37,7 +37,6 @@ export const loader = async ({ request }) => {
     const codeVerifier = generateCodeVerifier();
     const codeChallenge = generateCodeChallenge(codeVerifier);
     const state = generateState();
-    // [END step4-generate-pkce]
 
     // Store code verifier in database
     await prisma.codeVerifier.create({
