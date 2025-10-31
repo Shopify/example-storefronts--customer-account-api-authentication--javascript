@@ -14,13 +14,13 @@ include_config_on_deploy = true
 [webhooks]
 api_version = "2026-01"
 
-  [[webhooks.subscriptions]]
-  topics = [ "app/uninstalled" ]
-  uri = "/webhooks/app/uninstalled"
+[[webhooks.subscriptions]]
+topics = [ "app/uninstalled" ]
+uri = "/webhooks/app/uninstalled"
 
-  [[webhooks.subscriptions]]
-  topics = [ "app/scopes_update" ]
-  uri = "/webhooks/app/scopes_update"
+[[webhooks.subscriptions]]
+topics = [ "app/scopes_update" ]
+uri = "/webhooks/app/scopes_update"
 
 # [START step2-scopes]
 [access_scopes]
@@ -33,5 +33,5 @@ redirect_urls = [ "https://example.com/api/auth" ]
 
 # [START step3-customer-auth]
 [customer_authentication]
-  redirect_uris = ["https://<your-tunnel-url>/customer-account-api/callback"]
+redirect_uris = ["https://<your-tunnel-url>/customer-account-api/callback"]
 # [END step3-customer-auth]
