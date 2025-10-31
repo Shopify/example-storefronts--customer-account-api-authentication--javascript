@@ -1,3 +1,4 @@
+// [START step6-extract-params]
 import { redirect } from "react-router";
 import { useLoaderData } from "react-router";
 import prisma from "../db.server";
@@ -5,7 +6,7 @@ import { setCustomerTokenId } from "../sessions.server";
 
 export const loader = async ({ request }) => {
   try {
-    // [START step6-extract-params]
+    
     const url = new URL(request.url);
     const code = url.searchParams.get("code");
     const state = url.searchParams.get("state");
@@ -39,13 +40,13 @@ export const loader = async ({ request }) => {
     const tokenEndpoint = openidConfig.token_endpoint;
     // [END step6-fetch-token-endpoint]
 
+    // [START step6-exchange-token]
     // Get callback URL
     const callbackUrl = `https://${url.host}/customer-account-api/callback`;
 
     // Get client_id from environment or config
     const clientId = process.env.SHOPIFY_API_KEY;
-
-    // [START step6-exchange-token]
+    
     // Exchange authorization code for access token
     const tokenResponse = await fetch(tokenEndpoint, {
       method: "POST",
@@ -68,13 +69,13 @@ export const loader = async ({ request }) => {
 
     const tokenData = await tokenResponse.json();
     // [END step6-exchange-token]
-
+    
+    // [START step6-store-token]
     // Calculate token expiration
     const expiresAt = tokenData.expires_in
       ? new Date(Date.now() + tokenData.expires_in * 1000)
       : null;
-
-    // [START step6-store-token]
+    
     // Store the access token in the database
     const customerAccessToken = await prisma.customerAccessToken.create({
       data: {
@@ -98,7 +99,7 @@ export const loader = async ({ request }) => {
         "Set-Cookie": setCookieHeader,
       },
     });
-    // [END step6-redirect]
+   
   } catch (error) {
     console.error("Error in callback:", error);
     return {
@@ -125,3 +126,4 @@ export default function CustomerAccountApiCallback() {
     </div>
   );
 }
+// [END step6-redirect]
