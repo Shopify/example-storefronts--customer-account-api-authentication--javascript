@@ -67,6 +67,7 @@ export const loader = async ({ request }) => {
 
     // Redirect directly to the authorization URL
     return redirect(authUrl.toString());
+    // [END step4-build-auth-url]
    
   } catch (error) {
     console.error("Error generating auth URL:", error);
@@ -94,5 +95,4 @@ export default function CustomerAccountApiAuth() {
     </div>
   );
 }
-// [END step4-build-auth-url]
 
