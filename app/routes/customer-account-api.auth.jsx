@@ -1,3 +1,4 @@
+// [START step4-define-pkce-helpers]
 import { redirect, useLoaderData } from "react-router";
 import crypto from "crypto";
 import prisma from "../db.server";
@@ -13,7 +14,7 @@ function generateCodeChallenge(verifier) {
 function generateState() {
   return crypto.randomBytes(16).toString("base64url");
 }
-
+// [END step4-define-pkce-helpers]
 export const loader = async ({ request }) => {
   try {
     // [START step4-fetch-openid]
@@ -29,14 +30,13 @@ export const loader = async ({ request }) => {
     const authorizationEndpoint = openidConfig.authorization_endpoint;
     // [END step4-fetch-openid]
 
-    // [START step4-generate-pkce]
+    // [START step4-generate-and-store]
     // Generate PKCE parameters
     const codeVerifier = generateCodeVerifier();
     const codeChallenge = generateCodeChallenge(codeVerifier);
     const state = generateState();
     // [END step4-generate-pkce]
 
-    // [START step4-store-verifier]
     // Store code verifier in database
     await prisma.codeVerifier.create({
       data: {
@@ -44,8 +44,9 @@ export const loader = async ({ request }) => {
         verifier: codeVerifier,
       },
     });
-    // [END step4-store-verifier]
+    // [END step4-generate-and-store]
 
+    // [START step4-build-auth-url]
     // Get the callback URL from the request
     const url = new URL(request.url);
     const callbackUrl = `https://${url.host}/customer-account-api/callback`;
@@ -53,7 +54,6 @@ export const loader = async ({ request }) => {
     // Get client_id from environment or config
     const clientId = process.env.SHOPIFY_API_KEY;
 
-    // [START step4-build-auth-url]
     // Build authorization URL
     const authUrl = new URL(authorizationEndpoint);
     authUrl.searchParams.set("client_id", clientId);
@@ -66,7 +66,7 @@ export const loader = async ({ request }) => {
 
     // Redirect directly to the authorization URL
     return redirect(authUrl.toString());
-    // [END step4-build-auth-url]
+   
   } catch (error) {
     console.error("Error generating auth URL:", error);
     // If there's an error, return error data to display
@@ -93,4 +93,5 @@ export default function CustomerAccountApiAuth() {
     </div>
   );
 }
+// [END step4-build-auth-url]
 
