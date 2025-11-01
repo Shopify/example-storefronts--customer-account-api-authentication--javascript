@@ -1,9 +1,8 @@
-
+// [START step4-define-pkce-helpers]
 import { redirect, useLoaderData } from "react-router";
 import crypto from "crypto";
 import prisma from "../db.server";
 
-// [START step4-define-pkce-helpers]
 function generateCodeVerifier() {
   return crypto.randomBytes(32).toString("base64url");
 }
