@@ -1,10 +1,8 @@
 // [START step5-session-storage]
 import { createCookieSessionStorage } from "react-router";
 
-/**
- * Customer session storage for Customer Account API authentication
- * Stores customer access token ID in an encrypted, HTTP-only cookie
- */
+// Customer session storage for Customer Account API authentication
+// Stores customer access token ID in an encrypted, HTTP-only cookie
 export const customerSessionStorage = createCookieSessionStorage({
   cookie: {
     name: "__customer_session",
@@ -17,11 +15,7 @@ export const customerSessionStorage = createCookieSessionStorage({
   },
 });
 
-/**
- * Helper to get customer token ID from session
- * @param {Request} request - The incoming request
- * @returns {Promise<string|null>} The customer token ID or null
- */
+// Get customer token ID from session
 export async function getCustomerTokenId(request) {
   const session = await customerSessionStorage.getSession(
     request.headers.get("Cookie")
@@ -29,12 +23,7 @@ export async function getCustomerTokenId(request) {
   return session.get("customerTokenId");
 }
 
-/**
- * Helper to set customer token ID in session
- * @param {Request} request - The incoming request
- * @param {string} tokenId - The customer token ID to store
- * @returns {Promise<string>} Set-Cookie header value
- */
+// Set customer token ID in session
 export async function setCustomerTokenId(request, tokenId) {
   const session = await customerSessionStorage.getSession(
     request.headers.get("Cookie")
@@ -43,11 +32,7 @@ export async function setCustomerTokenId(request, tokenId) {
   return customerSessionStorage.commitSession(session);
 }
 
-/**
- * Helper to destroy customer session
- * @param {Request} request - The incoming request
- * @returns {Promise<string>} Set-Cookie header value
- */
+// Destroy customer session
 export async function destroyCustomerSession(request) {
   const session = await customerSessionStorage.getSession(
     request.headers.get("Cookie")
